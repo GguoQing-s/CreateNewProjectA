@@ -63,7 +63,7 @@ public class S_Fragment_tj extends Fragment {
 
     private void huoqu() {
         VolleyTo volleyTo = new VolleyTo();
-        volleyTo.setUrl("get_shousi_photo")
+        volleyTo.setUrl("get_tj")
                 .setJsonObject("UserName", "user1")
                 .setVolleyLo(new VolleyLo() {
                     @Override
@@ -73,11 +73,8 @@ public class S_Fragment_tj extends Fragment {
                             Gson gson = new Gson();
                             JSONArray jsonArray = new JSONArray(jsonObject.getString("ROWS_DETAIL"));
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                if (jsonArray.getJSONObject(i).getInt("type")==1)
-                                {
-                                    Tj tj = gson.fromJson(jsonArray.getString(i), Tj.class);
-                                    mTj.add(tj);
-                                }
+                                Tj tj = gson.fromJson(jsonArray.getString(i), Tj.class);
+                                mTj.add(tj);
 
                             }
                             setadapter();

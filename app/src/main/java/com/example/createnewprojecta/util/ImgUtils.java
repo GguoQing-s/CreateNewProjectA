@@ -16,19 +16,18 @@ import java.io.IOException;
 
 public class ImgUtils {
 
-    public static  void saveCanvas(Context context, Bitmap bitmap)
-    {
+    public static void saveCanvas(Context context, Bitmap bitmap) {
         Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
                 bitmap.getConfig());
         Canvas canvas = new Canvas(bitmap2);
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(bitmap, new Matrix(), null);
-        saveImageToGallery(context,bitmap2);
+        saveImageToGallery(context, bitmap2);
     }
 
 
     //保存文件到指定路径
-    public static   boolean saveImageToGallery(Context context, Bitmap bmp) {
+    public static boolean saveImageToGallery(Context context, Bitmap bmp) {
         // 首先保存图片
         String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dearxy";
         File appDir = new File(storePath);
@@ -47,7 +46,7 @@ public class ImgUtils {
 
             Uri uri = Uri.fromFile(file);
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-            Toast.makeText(context,"图片保存成功",Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "图片保存成功", Toast.LENGTH_LONG).show();
             if (isSuccess) {
                 return true;
             } else {
@@ -58,4 +57,7 @@ public class ImgUtils {
         }
         return false;
     }
+
+
+
 }

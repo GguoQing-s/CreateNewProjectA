@@ -3,10 +3,13 @@ package com.example.createnewprojecta.dialog;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -21,6 +24,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.createnewprojecta.R;
@@ -73,12 +77,27 @@ public class Fx_Dialog extends DialogFragment {
     private int A=1;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
+            File file = (File) msg.obj;
             if (msg.what == A) {
-                Bitmap bitmap = (Bitmap) msg.obj;
-                ImgUtils.saveCanvas(getContext(), bitmap);
-                getDialog().dismiss();
+                try {
+                    Uri uri = Uri.fromFile(file);
+                    getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                    Toast.makeText(getContext(), "图片保存成功", Toast.LENGTH_LONG).show();
+                }catch (Exception ex){
+                    Toast.makeText(getContext(), "图片保存失败", Toast.LENGTH_LONG).show();
+                }finally {
+                    getDialog().dismiss();
+                }
             }else if (msg.what==2){
-                nativeShareTool.shareWechatFriend((File) msg.obj,true);
+                nativeShareTool.shareWechatFriend(file,true);
+            }else if (msg.what==3){
+                nativeShareTool.shareWechatMoment(file);
+            }else if(msg.what==4){
+                nativeShareTool.shareImageToQQ(file);
+            }else if (msg.what==5){
+                nativeShareTool.shareImageToQQZone(file.getPath());
+            }else if(msg.what==6){
+                nativeShareTool.shareToSinaFriends(getContext(),true,file.getPath());
             }
         }
     };
@@ -198,7 +217,6 @@ public class Fx_Dialog extends DialogFragment {
                                 while( (len = is.read(buffer)) != -1 ){
                                     out.write(buffer, 0, len);
                                 }
-
                                 is.close();
                                 out.close();// 保存数据
                                 Message msg = new Message();
@@ -216,16 +234,20 @@ public class Fx_Dialog extends DialogFragment {
                 }).start();
                 break;
             case R.id.pyq:
-                break;
-            case R.id.qq:
-                break;
-            case R.id.kj:
-                break;
-            case R.id.wb:
-                break;
-            case R.id.bc:
-                new Thread() {
+                new Thread(new Runnable() {
+                    @Override
                     public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.gif");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                         try {
                             URL url = new URL(path);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -234,10 +256,192 @@ public class Fx_Dialog extends DialogFragment {
                             int code = conn.getResponseCode();
                             if (code == 200) {
                                 InputStream is = conn.getInputStream();
-                                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
+                                Message msg = new Message();
+                                msg.what = 3;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.qq:
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.gif");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
+                                Message msg = new Message();
+                                msg.what = 4;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.kj:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.gif");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
+                                Message msg = new Message();
+                                msg.what = 5;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.wb:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.gif");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
+                                Message msg = new Message();
+                                msg.what = 6;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+                break;
+            case R.id.bc:
+                new Thread() {
+                    public void run() {
+                        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dearxy", System.currentTimeMillis() + ".gif");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
                                 Message msg = new Message();
                                 msg.what = A;
-                                msg.obj = bitmap;
+                                msg.obj = file;
                                 handler.sendMessage(msg);
                             }
                         } catch (Exception e) {

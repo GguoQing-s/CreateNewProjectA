@@ -42,14 +42,15 @@ public class S_Fragment_zz extends Fragment {
     @BindView(R.id.title_layout)
     LinearLayout titleLayout;
     private S_ImageAdapter imageAdapter;
-    public int width,screenWidth;
+    public int width, screenWidth;
     private List<Dt> mDt;
     private String[] mname = {"寿司", "吉祥物", "包子", "斗牛家", "粒子"
-            , "女警察", "消防员", "护士", "西瓜", "渔夫","放心农场","小猪"};
-    private String type="寿司";
-    public S_Fragment_zz(int width,int screenWidth) {
+            , "女警察", "消防员", "护士", "西瓜", "渔夫", "放心农场", "小猪"};
+    private String type = "寿司";
+
+    public S_Fragment_zz(int width, int screenWidth) {
         this.width = width;
-        this.screenWidth=screenWidth;
+        this.screenWidth = screenWidth;
     }
 
     @Nullable
@@ -70,28 +71,24 @@ public class S_Fragment_zz extends Fragment {
 
     private void addTitle() {
         titleLayout.removeAllViews();
-        for (int i=0;i<mname.length;i++)
-        {
-            final View view  =View.inflate(getContext(),R.layout.title_item,null);
+        for (int i = 0; i < mname.length; i++) {
+            final View view = View.inflate(getContext(), R.layout.title_item, null);
             TextView textView = view.findViewById(R.id.name);
-            if (mname[0].equals(mname[i]))
-            {
+            if (mname[0].equals(mname[i])) {
                 textView.setBackgroundResource(R.drawable.tbk1);
             }
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     TextView tv = view.findViewById(R.id.name);
-                    type=tv.getText().toString();
+                    type = tv.getText().toString();
                     setjieko(type);
-                    for (int i=0;i<titleLayout.getChildCount();i++)
-                    {
-                        View view1 =titleLayout.getChildAt(i);
+                    for (int i = 0; i < titleLayout.getChildCount(); i++) {
+                        View view1 = titleLayout.getChildAt(i);
                         TextView tv2 = view1.findViewById(R.id.name);
-                        if (tv2.getText().toString().equals(type))
-                        {
+                        if (tv2.getText().toString().equals(type)) {
                             tv2.setBackgroundResource(R.drawable.tbk1);
-                        }else {
+                        } else {
                             tv2.setBackgroundResource(R.drawable.tbk2);
                         }
                     }
@@ -100,14 +97,13 @@ public class S_Fragment_zz extends Fragment {
 
             textView.setText(mname[i]);
             textView.setTextSize(20);
-            view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth/3, ViewGroup.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 3, ViewGroup.LayoutParams.WRAP_CONTENT));
             titleLayout.addView(view);
         }
     }
 
     private void setjieko(String name) {
-        switch (name)
-        {
+        switch (name) {
             case "寿司":
                 huoqu("get_shousi_photo");
                 break;
@@ -159,8 +155,7 @@ public class S_Fragment_zz extends Fragment {
                             Gson gson = new Gson();
                             JSONArray jsonArray = new JSONArray(jsonObject.getString("ROWS_DETAIL"));
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                if (jsonArray.getJSONObject(i).getInt("type")==1)
-                                {
+                                if (jsonArray.getJSONObject(i).getInt("type") == 1) {
                                     Dt dt = gson.fromJson(jsonArray.getString(i), Dt.class);
                                     mDt.add(dt);
                                 }
@@ -187,8 +182,8 @@ public class S_Fragment_zz extends Fragment {
             @Override
             public void setdata(int position, String image) {
                 startActivity(new Intent(getContext(), S_ZZActivity2.class)
-                        .putExtra("type",type).putExtra("path",image)
-                .putExtra("width",screenWidth));
+                        .putExtra("type", type).putExtra("path", image)
+                        .putExtra("width", screenWidth));
             }
         });
     }

@@ -12,6 +12,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,11 @@ import com.example.createnewprojecta.util.NativeShareTool;
 import com.example.createnewprojecta.util2.Resource;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import butterknife.BindView;
@@ -74,6 +77,8 @@ public class Fx_Dialog extends DialogFragment {
                 Bitmap bitmap = (Bitmap) msg.obj;
                 ImgUtils.saveCanvas(getContext(), bitmap);
                 getDialog().dismiss();
+            }else if (msg.what==2){
+                nativeShareTool.shareWechatFriend((File) msg.obj,true);
             }
         }
     };
@@ -166,7 +171,43 @@ public class Fx_Dialog extends DialogFragment {
                 getDialog().dismiss();
                 break;
             case R.id.wx:
-                nativeShareTool.shareWechatFriend(Resource.getInstance(getActivity()).getPicFile(path),true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.jpg");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                Message msg = new Message();
+                                msg.what = 2;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
                 break;
             case R.id.pyq:
                 break;

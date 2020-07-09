@@ -5,18 +5,28 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+
+import com.example.createnewprojecta.R;
+import com.example.createnewprojecta.util.BitMapUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class Resource {
     private static Resource instance;
     private Context mContext;
+
 
     private Resource(Context context) {
         this.mContext = context.getApplicationContext();
@@ -31,9 +41,10 @@ public class Resource {
 
     /**
      * 获取图片文件资源
+     *
      * @return
      */
-    public File getPicFile(String path) {
+    public File getPicFile(final String path) {
         Log.d("-----", "getPicFile: -----"+path);
         AssetManager assets = mContext.getResources().getAssets();
         InputStream open = null;
@@ -64,8 +75,10 @@ public class Resource {
         return mFile;
     }
 
+
     /**
      * 获取一般文件资源
+     *
      * @param fileName 必须加上后缀  如：newpdf.pdf  | contract.docx, 这两个文件我写在assets目录中，我这里为方便参考写成这样，后面可自己修改
      * @return
      */
@@ -75,16 +88,16 @@ public class Resource {
         File shareFile = null;
         try {
             open = assetManager.open(fileName);
-            String saveFilePath = Environment.getExternalStorageDirectory()+"/android/data/"+mContext.getPackageName()+"/shareFile/";
+            String saveFilePath = Environment.getExternalStorageDirectory() + "/android/data/" + mContext.getPackageName() + "/shareFile/";
             File file = new File(saveFilePath);
-            if (!file.exists()){
+            if (!file.exists()) {
                 file.mkdirs();
             }
             shareFile = new File(saveFilePath + fileName);
             if (!shareFile.exists()) {
                 shareFile.createNewFile();
             }
-            copyFile(open,shareFile);
+            copyFile(open, shareFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

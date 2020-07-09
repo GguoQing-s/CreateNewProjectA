@@ -34,7 +34,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".MainActivity2"/>
         <activity android:name=".MainActivity3"/>
-        <activity android:name=".activity.S_FLActivity"/>
         <activity android:name=".activity.S_YJFKActivity"/>
         <provider
             android:name="android.support.v4.content.FileProvider"

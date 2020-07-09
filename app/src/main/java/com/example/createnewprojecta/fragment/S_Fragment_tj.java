@@ -1,9 +1,6 @@
 package com.example.createnewprojecta.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,12 +11,8 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.android.volley.VolleyError;
-import com.example.createnewprojecta.MainActivity3;
 import com.example.createnewprojecta.R;
-import com.example.createnewprojecta.activity.S_FLActivity;
-import com.example.createnewprojecta.adapter.S_ImageAdapter;
 import com.example.createnewprojecta.adapter.S_TjAdapter;
-import com.example.createnewprojecta.bean.Dt;
 import com.example.createnewprojecta.bean.Tj;
 import com.example.createnewprojecta.dialog.Fx_Dialog;
 import com.example.createnewprojecta.net.VolleyLo;
@@ -29,7 +22,6 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,8 +100,9 @@ public class S_Fragment_tj extends Fragment {
         tjAdapter.SetData(new S_TjAdapter.SetData() {
             @Override
             public void setdata(int position, String image) {
-                startActivity(new Intent(getContext(), S_FLActivity.class)
-                        .putExtra("width",width).putExtra("screenWidth",screenWidth));
+                Fx_Dialog fx_dialog = new Fx_Dialog(screenWidth, image);
+                fx_dialog.show(getFragmentManager(), "");
+                fx_dialog.setCancelable(false);
 
             }
         });

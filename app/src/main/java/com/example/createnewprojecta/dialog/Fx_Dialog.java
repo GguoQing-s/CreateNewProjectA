@@ -174,7 +174,7 @@ public class Fx_Dialog extends DialogFragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        File file = new File(getContext().getExternalCacheDir(), "out111put.jpg");
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.gif");
                         FileOutputStream out = null;
                         if (file.exists()) {
                             file.delete();
@@ -193,8 +193,14 @@ public class Fx_Dialog extends DialogFragment {
                             int code = conn.getResponseCode();
                             if (code == 200) {
                                 InputStream is = conn.getInputStream();
-                                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while( (len = is.read(buffer)) != -1 ){
+                                    out.write(buffer, 0, len);
+                                }
+
+                                is.close();
+                                out.close();// 保存数据
                                 Message msg = new Message();
                                 msg.what = 2;
                                 msg.obj = file;

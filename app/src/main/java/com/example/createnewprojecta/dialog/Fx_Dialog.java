@@ -97,7 +97,7 @@ public class Fx_Dialog extends DialogFragment {
             }else if (msg.what==5){
                 nativeShareTool.shareImageToQQZone(file.getPath());
             }else if(msg.what==6){
-                nativeShareTool.shareToSinaFriends(getContext(),true,file.getPath());
+                nativeShareTool.shareToSinaFriends(getContext(),false,file.getPath());
             }
         }
     };

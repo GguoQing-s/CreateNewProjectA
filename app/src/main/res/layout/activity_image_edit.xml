@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/banner"
+        layout="@layout/head"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/work_space"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <com.example.imageditlibrary.view.imagezoom.ImageViewTouch
+                android:id="@+id/main_image"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"/>
+
+
+            <com.example.imageditlibrary.view.StickerView
+                android:id="@+id/sticker_panel"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center" />
+
+
+        </FrameLayout>
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/farmeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"></FrameLayout>
+
+    <!--<com.example.imageditlibrary.view.CustomViewPager-->
+    <!--android:id="@+id/bottom_gallery"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:background="#fff"-->
+    <!--android:overScrollMode="never" />-->
+
+
+</LinearLayout>

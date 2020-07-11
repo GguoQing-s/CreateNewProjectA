@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,11 +30,15 @@ import com.example.createnewprojecta.bean.Zz;
 import com.example.createnewprojecta.net.VolleyLo;
 import com.example.createnewprojecta.net.VolleyTo;
 import com.example.createnewprojecta.util.ImgUtils;
+import com.example.createnewprojecta.util2.ImageListener;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -63,13 +70,13 @@ public class S_ZZActivity2 extends AppCompatActivity {
     private int A = 1, B = 2, screenWidth;
     private Canvas canvas;
     private List<Bitmap> mBitmap;
+    private List<View> views;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
+            Bitmap bitmap = (Bitmap) msg.obj;
             if (msg.what == A) {
-                Bitmap bitmap = (Bitmap) msg.obj;
                 mergeBitmap(bitmap);
             } else if (msg.what == B) {
-                Bitmap bitmap = (Bitmap) msg.obj;
                 mBitmap.add(bitmap);
             }
         }
@@ -80,6 +87,7 @@ public class S_ZZActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.s_zzactivity2);
         ButterKnife.bind(this);
+        views = new ArrayList<>();
         init();
     }
 
@@ -168,6 +176,7 @@ public class S_ZZActivity2 extends AppCompatActivity {
         setjieko(type);
         View view = View.inflate(S_ZZActivity2.this, R.layout.im_item, null);
         ImageView imageView = view.findViewById(R.id.canvas_image);
+        imageView.setOnTouchListener(new ImageListener(imageView));
         ImageView delete = view.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +196,7 @@ public class S_ZZActivity2 extends AppCompatActivity {
             }
         });
         Glide.with(S_ZZActivity2.this).load(path).into(imageView);
-        view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth/2, screenWidth/2));
+        view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 2, screenWidth / 2));
         canvasLayout.addView(view);
     }
 
@@ -205,9 +214,11 @@ public class S_ZZActivity2 extends AppCompatActivity {
 
     private void setData(int y) {
         final View view = View.inflate(S_ZZActivity2.this, R.layout.im_item, null);
+
         final ImageView imageView = view.findViewById(R.id.canvas_image);
         TextView textView = view.findViewById(R.id.number);
         ImageView delete = view.findViewById(R.id.delete);
+
         for (int i = 0; i < canvasLayout.getChildCount(); i++) {
             canvasLayout.getChildAt(i)
                     .findViewById(R.id.canvas_image).setBackgroundResource(R.drawable.bk1);
@@ -248,7 +259,7 @@ public class S_ZZActivity2 extends AppCompatActivity {
                     if (tv2.getText().toString().equals(tv.getText().toString())) {
                         canvasLayout.getChildAt(i)
                                 .findViewById(R.id.canvas_image).setBackgroundResource(R.drawable.bk);
-                        imageView.setOnTouchListener(new ImageScale(imageView));
+//                        imageView.setOnTouchListener(new ImageScale(imageView));
                     } else {
                         canvasLayout.getChildAt(i)
                                 .findViewById(R.id.canvas_image).setBackgroundResource(R.drawable.bk1);
@@ -258,9 +269,10 @@ public class S_ZZActivity2 extends AppCompatActivity {
         });
         Glide.with(S_ZZActivity2.this).load(mZz.get(y).getImagepath()).into(imageView);
         textView.setText(y + "");
-        view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth/2, screenWidth/2));
+        view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 2, screenWidth / 2));
         canvasLayout.addView(view);
     }
+
 
     private void addData() {
         for (int i = 0; i < mZz.size(); i++) {
@@ -275,7 +287,7 @@ public class S_ZZActivity2 extends AppCompatActivity {
                 }
             });
             Glide.with(S_ZZActivity2.this).load(mZz.get(i).getImagepath()).into(imageView);
-            view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth/2, screenWidth/2));
+            view.setLayoutParams(new LinearLayout.LayoutParams(screenWidth / 2, screenWidth / 2));
             imageLayout.addView(view);
         }
     }
@@ -380,9 +392,25 @@ public class S_ZZActivity2 extends AppCompatActivity {
                         }
                     }
                 }.start();
+//                Log.i("111", "onViewClicked: "+canvasLayout.getChildCount());
+//                ImageView imageView = canvasLayout.getChildAt(0).findViewById(R.id.canvas_image);
+//                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//                canvas = new Canvas(bitmap);
+//                if (views.size()>1) {
+//                    for (int i = 1; i < views.size(); i++) {
+//                        canvas.drawBitmap(((BitmapDrawable) imageView.getDrawable()).getBitmap(), new Matrix(), null);
+//                    }
+//                }
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ImgUtils.saveCanvas(S_ZZActivity2.this, bitmap);//
+//                    }
+//                });
                 break;
         }
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

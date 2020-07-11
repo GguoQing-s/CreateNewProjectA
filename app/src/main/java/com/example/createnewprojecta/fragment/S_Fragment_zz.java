@@ -3,6 +3,9 @@ package com.example.createnewprojecta.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,21 +21,31 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.example.createnewprojecta.R;
 import com.example.createnewprojecta.activity.S_ZZActivity2;
+import com.example.createnewprojecta.activity.Z_BJActivity;
 import com.example.createnewprojecta.adapter.S_ImageAdapter;
 import com.example.createnewprojecta.bean.Dt;
 import com.example.createnewprojecta.net.VolleyLo;
 import com.example.createnewprojecta.net.VolleyTo;
+import com.example.createnewprojecta.util.FileUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.media.audiofx.AudioEffect.ERROR;
 
 @SuppressLint("ValidFragment")
 public class S_Fragment_zz extends Fragment {
@@ -48,10 +61,25 @@ public class S_Fragment_zz extends Fragment {
             , "女警察", "消防员", "护士", "西瓜", "渔夫", "放心农场", "小猪"};
     private String type = "寿司";
 
+    public static final int ACTION_REQUEST_EDITIMAGE = 9;
+
     public S_Fragment_zz(int width, int screenWidth) {
         this.width = width;
         this.screenWidth = screenWidth;
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (msg.what == 1) {
+                File file = (File) msg.obj;
+                File outputFile = FileUtils.genEditFile();
+                Z_BJActivity.start(getActivity(), file.getPath(), Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dearxy", ACTION_REQUEST_EDITIMAGE, type);
+
+            }
+            return false;
+        }
+    });
 
     @Nullable
     @Override
@@ -181,9 +209,53 @@ public class S_Fragment_zz extends Fragment {
         imageAdapter.SetData(new S_ImageAdapter.SetData() {
             @Override
             public void setdata(int position, String image) {
-                startActivity(new Intent(getContext(), S_ZZActivity2.class)
-                        .putExtra("type", type).putExtra("path", image)
-                        .putExtra("width", screenWidth));
+                final String path = image;
+//                startActivity(new Intent(getContext(), S_ZZActivity2.class).putExtra("type", type).putExtra("path", image).putExtra("width", screenWidth));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File file = new File(getContext().getExternalCacheDir(), "out111put.png");
+                        FileOutputStream out = null;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        try {
+                            file.createNewFile();
+                            out = new FileOutputStream(file);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            URL url = new URL(path);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("GET");
+                            conn.setConnectTimeout(5000);
+                            int code = conn.getResponseCode();
+                            if (code == 200) {
+                                InputStream is = conn.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int len = -1;
+                                while ((len = is.read(buffer)) != -1) {
+                                    out.write(buffer, 0, len);
+                                }
+                                is.close();
+                                out.close();// 保存数据
+
+                                Message msg = new Message();
+                                msg.what = 1;
+                                msg.obj = file;
+                                handler.sendMessage(msg);
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+
             }
         });
     }

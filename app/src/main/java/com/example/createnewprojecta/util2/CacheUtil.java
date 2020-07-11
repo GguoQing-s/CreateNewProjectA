@@ -7,15 +7,18 @@ import android.widget.Toast;
 import java.io.File;
 import java.math.BigDecimal;
 
-/** * 本应用数据清除管理器 */
+/**
+ * 本应用数据清除管理器
+ */
 public class CacheUtil {
     /**
      * 获取缓存大小
+     *
      * @param context
      * @return
      * @throws Exception
      */
-    public  String getTotalCacheSize(Context context) throws Exception {
+    public String getTotalCacheSize(Context context) throws Exception {
         long cacheSize = getFolderSize(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             cacheSize += getFolderSize(context.getExternalCacheDir());
@@ -27,11 +30,11 @@ public class CacheUtil {
      * 清理所有缓存
      * @param context
      */
-    public  void clearAllCache(Context context) {
+    public void clearAllCache(Context context) {
         deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             deleteDir(context.getExternalCacheDir());
-            Toast.makeText(context,"清理成功",Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "清理成功", Toast.LENGTH_LONG).show();
         }
     }
 

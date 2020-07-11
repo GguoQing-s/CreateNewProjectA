@@ -10,7 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.com.example.createnewprojecta.view.View;
 import android.widget.Toast;
 import com.example.createnewprojecta.R;
 import java.util.List;

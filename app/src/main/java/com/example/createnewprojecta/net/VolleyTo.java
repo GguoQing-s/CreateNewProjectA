@@ -35,8 +35,6 @@ public class VolleyTo extends Thread {
         }
     });
 
-
-
     public VolleyTo setUrl(String url) {
         Url += url;
       /*  try {

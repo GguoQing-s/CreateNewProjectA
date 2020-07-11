@@ -5,15 +5,15 @@
     android:background="#FDDC01"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="50dp">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@drawable/close"
             android:id="@+id/change1"
             />
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="推荐"
-        android:textSize="30dp"
+        android:textSize="22dp"
         android:id="@+id/title"
         android:textColor="#000"
         android:gravity="center"
@@ -44,8 +44,8 @@
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/change"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/xing" />
         </LinearLayout>
     </LinearLayout>

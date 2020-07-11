@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,10 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +69,7 @@ public class Z_BJActivity extends BaseActivity {
     public StickerView mStickerView;// 贴图层View
     private LoadImageTask mLoadImageTask;
     public String type;
+    private int screenWidth;
     private SaveImageTask mSaveImageTask;
 
     /**
@@ -92,7 +97,50 @@ public class Z_BJActivity extends BaseActivity {
         filePath = getIntent().getStringExtra(FILE_PATH);
         saveFilePath = getIntent().getStringExtra(EXTRA_OUTPUT);// 保存图片路径
         initView();
+        dianjia();
+        initData();
+        initTitle();
+    }
+    private void initTitle() {
+        /*LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) layout.getLayoutParams();
+        layoutParams.height = screenWidth / 8;
+        layoutParams.width = screenWidth;
+        layout.setLayoutParams(layoutParams);
+        title.setTextSize(22);*/
+    }
+    private void initData() {
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        Point outSize = new Point();
+        display.getSize(outSize);
+        screenWidth = outSize.x;
 
+
+    }
+
+    private void dianjia() {
+        change1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Z_BJActivity.this);
+                builder.setTitle("提示");
+                builder.setCancelable(false);
+                builder.setMessage("是否返回首页！");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
 
@@ -135,8 +183,10 @@ public class Z_BJActivity extends BaseActivity {
         layout = findViewById(R.id.layout);
         change1 = findViewById(R.id.change1);
         title = findViewById(R.id.title);
+        title.setText("制作");
         change = findViewById(R.id.change);
         mainImage = findViewById(R.id.main_image);
+        change.setImageResource(R.drawable.baocun);
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -301,5 +351,26 @@ public class Z_BJActivity extends BaseActivity {
 
     public Bitmap getMainBit() {
         return mainBitmap;
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Z_BJActivity.this);
+        builder.setTitle("提示");
+        builder.setCancelable(false);
+        builder.setMessage("是否返回首页！");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+        return super.onKeyDown(keyCode, event);
     }
 }

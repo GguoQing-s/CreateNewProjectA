@@ -207,7 +207,7 @@ public class S_Fragment_dt extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image:
-                startActivity(new Intent(getContext(), MainActivity2.class));
+                startActivity(new Intent(getContext(), MainActivity2.class).putExtra("width", screenWidth));
                 break;
             case R.id.floatButton:
                 startActivity(new Intent(getContext(), MainActivity2.class).putExtra("width", screenWidth));

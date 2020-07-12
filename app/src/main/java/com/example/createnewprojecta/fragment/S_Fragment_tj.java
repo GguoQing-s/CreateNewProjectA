@@ -36,12 +36,13 @@ public class S_Fragment_tj extends Fragment {
     Unbinder unbinder;
     private List<Tj> mTj;
     private S_TjAdapter tjAdapter;
-    private int width,screenWidth;
-    public S_Fragment_tj(int width,int screenWidth)
-    {
-        this.width=width;
-        this.screenWidth=screenWidth;
+    private int width, screenWidth;
+
+    public S_Fragment_tj(int width, int screenWidth) {
+        this.width = width;
+        this.screenWidth = screenWidth;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class S_Fragment_tj extends Fragment {
     }
 
     private void inview() {
-        mTj= new ArrayList<>();
+        mTj = new ArrayList<>();
     }
 
     private void huoqu() {
@@ -92,7 +93,7 @@ public class S_Fragment_tj extends Fragment {
     }
 
     private void setadapter() {
-        tjAdapter  =new S_TjAdapter(getContext(),mTj,width);
+        tjAdapter = new S_TjAdapter(getContext(), mTj, width);
         gridView.setAdapter(tjAdapter);
         tjAdapter.SetData(new S_TjAdapter.SetData() {
             @Override

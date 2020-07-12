@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,6 +32,8 @@ import com.example.createnewprojecta.fragment.S_Fragment_dt;
 import com.example.createnewprojecta.fragment.S_Fragment_tj;
 import com.example.createnewprojecta.fragment.S_Fragment_wd;
 import com.example.createnewprojecta.fragment.S_Fragment_zz;
+import com.example.createnewprojecta.fragment.Z_FragmentMain;
+import com.example.createnewprojecta.fragment.Z_FragmentPhoto;
 import com.example.createnewprojecta.util.ColorUtil;
 import com.example.createnewprojecta.util.ShareToolUtil;
 
@@ -47,7 +50,7 @@ public class S_ZZActivity1 extends AppCompatActivity {
     @BindView(R.id.layout)
     LinearLayout layout;
     @BindView(R.id.canvas_layout)
-    LinearLayout canvasLayout;
+    FrameLayout canvasLayout;
     @BindView(R.id.im1)
     ImageView im1;
     @BindView(R.id.im2)
@@ -75,7 +78,7 @@ public class S_ZZActivity1 extends AppCompatActivity {
     }
     private void addFragment() {
         ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.canvas_layout, new S_Fragment_tj(width,screenWidth));
+        ft.replace(R.id.canvas_layout, new Z_FragmentPhoto());
         ft.commit();
     }
 
@@ -128,7 +131,8 @@ public class S_ZZActivity1 extends AppCompatActivity {
                 im2.setImageResource(R.drawable.zz1);
                 im3.setImageResource(R.drawable.dt1);
                 im4.setImageResource(R.drawable.wd1);
-                ft.replace(R.id.canvas_layout, new S_Fragment_tj(width,screenWidth));
+               // ft.replace(R.id.canvas_layout, new S_Fragment_tj(width,screenWidth));
+                ft.replace(R.id.canvas_layout,new Z_FragmentPhoto());
                 title.setText("推荐");
                 break;
             case R.id.im2:

@@ -73,7 +73,7 @@ public class StickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageHolder imageHoler = (ImageHolder) holder;
         final String path = images.get(position).getImagepath();
         Log.i("aaa", "onBindViewHolder: "+path);
-        imageHoler.image.setImageResource(R.drawable.app);
+      //  imageHoler.image.setImageResource(R.drawable.app);
         Glide.with(mStickerFragment.getContext()).load(path).into(imageHoler.image);
         imageHoler.image.setOnClickListener(new OnClickListener() {
             @Override

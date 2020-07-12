@@ -135,7 +135,45 @@ public class StickerFragment extends BaseEditFragment {
             case "小猪":
                 setVolley("get_xiaozhu_photo");
                 break;
+            case "":
+                setVolley1("get_alltype_photo");
+                break;
         }
+    }
+
+    private void setVolley1(String url) {
+        VolleyTo volleyTo = new VolleyTo();
+        volleyTo.setUrl(url)
+                .setJsonObject("UserName", "user1")
+                .setVolleyLo(new VolleyLo() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        try {
+                            if (mZz == null) {
+                                mZz = new ArrayList<>();
+                            } else {
+                                mZz.clear();
+                            }
+                            Gson gson = new Gson();
+                            JSONArray jsonArray = new JSONArray(jsonObject.getString("ROWS_DETAIL"));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                    Zz zz = gson.fromJson(jsonArray.getString(i), Zz.class);
+                                    mZz.add(zz);
+
+                            }
+                            mStickerAdapter = new StickerAdapter(StickerFragment.this, mZz);
+                            stickerList.setAdapter(mStickerAdapter);
+                            selectedStickerItem1(activity.filePath);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }).start();
     }
 
     private void setVolley(String url) {

@@ -91,26 +91,24 @@ public class StickerAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void addStickerImages(final String folderPath) {
+        if (images == null) {
+            images = new ArrayList<>();
+        } else {
+            images.clear();
+        }
+        if (folderPath.equals("")){
             VolleyTo volleyTo = new VolleyTo();
-            volleyTo.setUrl("get_alltype_photo")
+            volleyTo.setUrl("get_wenzi_photo")
                     .setJsonObject("UserName", "user1")
                     .setVolleyLo(new VolleyLo() {
                         @Override
                         public void onResponse(JSONObject jsonObject) {
                             try {
-                                if (images == null) {
-                                    images = new ArrayList<>();
-                                } else {
-                                    images.clear();
-                                }
                                 Gson gson = new Gson();
                                 JSONArray jsonArray = new JSONArray(jsonObject.getString("ROWS_DETAIL"));
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     Zz zz = gson.fromJson(jsonArray.getString(i), Zz.class);
-                                    if ((zz.getType()+"").equals(folderPath)) {
-                                        images.add(zz);
-                                    }
-
+                                    images.add(zz);
                                 }
                                 notifyDataSetChanged();
                             } catch (Exception e) {
@@ -123,6 +121,34 @@ public class StickerAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         }
                     }).start();
+        }else {
+            VolleyTo volleyTo = new VolleyTo();
+            volleyTo.setUrl("get_alltype_photo")
+                    .setJsonObject("UserName", "user1")
+                    .setVolleyLo(new VolleyLo() {
+                        @Override
+                        public void onResponse(JSONObject jsonObject) {
+                            try {
+                                Gson gson = new Gson();
+                                JSONArray jsonArray = new JSONArray(jsonObject.getString("ROWS_DETAIL"));
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    Zz zz = gson.fromJson(jsonArray.getString(i), Zz.class);
+                                    if ((zz.getType() + "").equals(folderPath)) {
+                                        images.add(zz);
+                                    }
+                                }
+                                notifyDataSetChanged();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+
+                        }
+                    }).start();
+        }
 
     }
 

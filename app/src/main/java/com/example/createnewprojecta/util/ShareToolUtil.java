@@ -66,30 +66,4 @@ public class ShareToolUtil {
     public static boolean isSDcardExist() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
-
-    public static void getPermission(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        boolean permission = PackageManager.PERMISSION_GRANTED  == packageManager.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE","com.share.gudd.intentshare");
-        if (permission) {
-            // 有这个权限
-        }else{
-            // 没有这个权限
-            // 如果android版本大于6.0，需要动态申请权限
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PERMISSION_CODE);
-            }
-        }
-
-        permission = PackageManager.PERMISSION_GRANTED  == packageManager.checkPermission("android.permission.READ_EXTERNAL_STORAGE","com.share.gudd.intentshare");
-        if (permission) {
-            // 有这个权限
-        }else{
-            // 没有这个权限
-            // 如果android版本大于6.0，需要动态申请权限
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_PERMISSION_CODE);
-            }
-        }
-    }
-
 }

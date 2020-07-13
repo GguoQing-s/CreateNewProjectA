@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.createnewprojecta.MainActivity;
 import com.example.createnewprojecta.R;
 import com.example.createnewprojecta.fragment.S_Fragment_dt;
 import com.example.createnewprojecta.fragment.S_Fragment_tj;
@@ -36,6 +37,11 @@ import com.example.createnewprojecta.fragment.Z_FragmentMain;
 import com.example.createnewprojecta.fragment.Z_FragmentPhoto;
 import com.example.createnewprojecta.util.ColorUtil;
 import com.example.createnewprojecta.util.ShareToolUtil;
+import com.example.createnewprojecta.util3.PermissionsCall;
+import com.example.createnewprojecta.util3.PermissionsUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,18 +69,56 @@ public class S_ZZActivity1 extends AppCompatActivity {
     ImageView change1;
     private FragmentTransaction ft;
     public int width, screenWidth;//屏幕宽度
-
+    private final static int requestCode = 111;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.s_zzactivity1);
         ButterKnife.bind(this);
-        ShareToolUtil.getPermission(this);
+        applyPermissions();
         ColorUtil.initColor(this);
         initData();
         initIamge();
         initTitle();
         addFragment();
+    }
+
+
+    public void applyPermissions() {
+        List<String> list = new ArrayList<>();
+        list.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        list.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        list.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        list.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        list.add(Manifest.permission.CAMERA);
+        list.add(Manifest.permission.CALL_PHONE);
+        list.add(Manifest.permission.READ_PHONE_STATE);
+        list.add(Manifest.permission.RECORD_AUDIO);
+        PermissionsUtils.with(S_ZZActivity1.this)
+                .permissions(list)
+                .request(requestCode, new PermissionsCall() {
+                    @Override
+                    public void errorRequest(String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void granted() {
+
+                    }
+
+                    @Override
+                    public void denideList(List<String> list) {
+
+                    }
+                });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtils.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     private void addFragment() {
         ft = getSupportFragmentManager().beginTransaction();

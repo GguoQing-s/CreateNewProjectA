@@ -58,7 +58,7 @@ public class S_Fragment_zz extends Fragment {
     public int width, screenWidth;
     private List<Dt> mDt;
     private String[] mname = {"寿司", "吉祥物", "包子", "斗牛家", "粒子"
-            , "女警察", "消防员", "护士", "西瓜", "渔夫", "放心农场", "小猪"};
+            , "西瓜", "渔夫", "放心农场", "小猪"};
     private String type = "寿司";
 
     public static final int ACTION_REQUEST_EDITIMAGE = 9;

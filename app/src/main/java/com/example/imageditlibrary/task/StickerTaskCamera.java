@@ -11,7 +11,6 @@ import android.util.Log;
 
 import com.example.createnewprojecta.R;
 import com.example.createnewprojecta.activity.Z_BJActivity;
-import com.example.createnewprojecta.activity.Z_CameraCreate;
 import com.example.imageditlibrary.utils.Matrix3;
 
 /**
@@ -19,12 +18,12 @@ import com.example.imageditlibrary.utils.Matrix3;
  * <p/>
  * 贴图合成任务 抽象类
  */
-public abstract class StickerTask extends AsyncTask<Bitmap, Void, Bitmap> {
+public abstract class StickerTaskCamera extends AsyncTask<Bitmap, Void, Bitmap> {
     private Dialog dialog;
 
-    private Z_CameraCreate mContext;
+    private Z_BJActivity mContext;
 
-    public StickerTask(Z_CameraCreate activity) {
+    public StickerTaskCamera(Z_BJActivity activity) {
         this.mContext = activity;
     }
 

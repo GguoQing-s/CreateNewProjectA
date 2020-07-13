@@ -114,8 +114,6 @@ public class Z_BJActivity extends BaseActivity {
         Point outSize = new Point();
         display.getSize(outSize);
         screenWidth = outSize.x;
-
-
     }
 
     private void dianjia() {

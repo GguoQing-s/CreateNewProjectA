@@ -44,6 +44,7 @@
             android:name=".activity.ImageSelectorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.Z_CameraCreate"/>
         <activity
             android:name=".activity.ImagePreviewActivity"
             android:screenOrientation="portrait"

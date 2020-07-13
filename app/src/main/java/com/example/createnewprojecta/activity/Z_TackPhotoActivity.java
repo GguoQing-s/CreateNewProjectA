@@ -125,8 +125,7 @@ public class Z_TackPhotoActivity extends AppCompatActivity {
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            Z_BJActivity.start(Z_TackPhotoActivity.this, file.getAbsolutePath(), Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dearxy", ACTION_REQUEST_EDITIMAGE, "");
-
+            Z_CameraCreate.start(Z_TackPhotoActivity.this, file.getAbsolutePath(), Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dearxy", ACTION_REQUEST_EDITIMAGE, "");
             return file.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();

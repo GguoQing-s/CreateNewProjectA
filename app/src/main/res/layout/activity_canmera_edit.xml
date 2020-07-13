@@ -39,7 +39,7 @@
     <FrameLayout
         android:id="@+id/farmeLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"></FrameLayout>
+        android:layout_height="120dp"></FrameLayout>
 
     <!--<com.example.imageditlibrary.view.CustomViewPager-->
     <!--android:id="@+id/bottom_gallery"-->
